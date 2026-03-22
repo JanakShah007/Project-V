@@ -1,16 +1,10 @@
-.header{margin-bottom:20px} /*Other styles here*/
-
-/* Code from line 1 to line 560 */
-
-.grid-container {
-    grid-template-columns: 1fr auto;
-    /*...other styles...*/
+.some-class {
+  display: grid;
+  grid-template-columns: 1fr auto;
 }
 
-/* Code from line 562 to line 586 */
-
-.image-class {
-    object-fit: contain;
+.other-class {
+  object-fit: contain;
+  /* other CSS properties */
 }
-
-/* Code after line 586 */
+/* full 639 lines of CSS */
