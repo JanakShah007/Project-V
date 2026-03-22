@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: site name in title -->
+  <title>Blog — VentureLens</title>
+  <meta name="description" content="All startup analyses and investment notes." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/shared.css" />
+</head>
+<body>
+
+  <!-- ====================================================
+       NAVBAR — REPLACE: brand name, links
+       ==================================================== -->
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <!-- REPLACE: brand name -->
+      <a href="index.html" class="navbar-brand">Venture<span class="accent">Lens</span></a>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-hero">
+    <!-- REPLACE: page heading / section title -->
+    <h1>All Posts</h1>
+    <p>Deep-dive startup analysis, investment theses, and founder stories.</p>
+  </div>
+
+  <!-- ====================================================
+       BLOG LISTING with tag filter
+       All filtering happens in JS below — no page reload.
+       To add tags, just add them to posts in data/posts.js.
+       ==================================================== -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Tag filter bar — populated dynamically from posts data -->
+      <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter posts by tag">
+        <!-- JS populates this -->
+      </div>
+
+      <!-- Cards grid — filtered by JS -->
+      <div class="cards-grid" id="posts-grid">
+        <!-- JS populates this -->
+      </div>
+
+      <!-- Empty state -->
+      <div class="no-results" id="no-results">
+        No posts match that filter. <a href="#" id="clear-filter">Clear filter</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====================================================
+       FOOTER — REPLACE: name, links
+       ==================================================== -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <!-- REPLACE: name/site in copyright -->
+    <p>&copy; <span id="footer-year"></span> Alex Morgan &mdash; VentureLens. All rights reserved.</p>
+  </footer>
+
+  <script src="data/posts.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    let activeTag = 'All';
+
+    // Build card HTML
+    function buildCard(post) {
+      const verdict = post.myVerdict;
+      const verdictLabel = verdict === 'bull' ? '🐂 Bull' : verdict === 'bear' ? '🐻 Bear' : '⚖️ Neutral';
+      const verdictClass = 'verdict-' + verdict;
+      const tags = post.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const dateStr = new Date(post.date).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+      return `
+        <article class="card" data-tags='${JSON.stringify(post.tags)}'>
+          <img class="card-thumb" src="${post.image}" alt="${post.imageAlt}" loading="lazy" />
+          <div class="card-body">
+            <div class="card-tags">${tags}</div>
+            <h3 class="card-title">${post.title}</h3>
+            <p class="card-summary">${post.summary}</p>
+            <div class="card-meta">${dateStr}</div>
+            <div class="card-footer" style="display:flex;align-items:center;justify-content:space-between;">
+              <span class="verdict-badge ${verdictClass}">${verdictLabel}</span>
+              <a href="post.html?id=${post.id}" class="btn btn-outline" style="padding:0.35rem 0.9rem;font-size:0.8rem;">Read &rarr;</a>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // Collect all unique tags
+    function getAllTags(posts) {
+      const set = new Set();
+      posts.forEach(p => p.tags.forEach(t => set.add(t)));
+      return ['All', ...Array.from(set).sort()];
+    }
+
+    // Render filter bar
+    function renderFilterBar(tags) {
+      const bar = document.getElementById('filter-bar');
+      bar.innerHTML = tags.map(tag => `
+        <button class="filter-btn${tag === activeTag ? ' active' : ''}" data-tag="${tag}">${tag}</button>
+      `).join('');
+
+      bar.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          activeTag = this.dataset.tag;
+          renderFilterBar(tags);
+          filterCards();
+        });
+      });
+    }
+
+    // Filter cards without page reload
+    function filterCards() {
+      const cards = document.querySelectorAll('#posts-grid .card');
+      let visible = 0;
+      cards.forEach(card => {
+        const tags = JSON.parse(card.dataset.tags);
+        const show = activeTag === 'All' || tags.includes(activeTag);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      const noResults = document.getElementById('no-results');
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    // Clear filter link
+    document.getElementById('clear-filter').addEventListener('click', function (e) {
+      e.preventDefault();
+      activeTag = 'All';
+      const tags = getAllTags(POSTS);
+      renderFilterBar(tags);
+      filterCards();
+    });
+
+    // Initial render
+    const sorted = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
+    document.getElementById('posts-grid').innerHTML = sorted.map(buildCard).join('');
+    renderFilterBar(getAllTags(POSTS));
+  </script>
+</body>
+</html>

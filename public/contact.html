@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: site name in title -->
+  <title>Contact — VentureLens</title>
+  <meta name="description" content="Get in touch — pitch a startup, say hello, or ask a question." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/shared.css" />
+</head>
+<body>
+
+  <!-- ====================================================
+       NAVBAR — REPLACE: brand name
+       ==================================================== -->
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <!-- REPLACE: brand name -->
+      <a href="index.html" class="navbar-brand">Venture<span class="accent">Lens</span></a>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-hero">
+    <!-- REPLACE: contact page heading -->
+    <h1>Get in Touch</h1>
+    <p>Pitching a startup, collaborating on research, or just saying hello — I'd love to hear from you.</p>
+  </div>
+
+  <!-- ====================================================
+       CONTACT SECTION
+       Form uses netlify attribute + data-netlify="true" for
+       Netlify Forms free-tier handling (no backend required).
+       REPLACE: email address, social links
+       ==================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-wrap">
+
+        <!-- ===== FORM ===== -->
+        <div>
+          <h2 style="margin-bottom:1.5rem;">Send a Message</h2>
+
+          <!--
+            Netlify Forms: the `netlify` attribute and data-netlify="true"
+            tell Netlify to intercept this form and store submissions.
+            The hidden `form-name` input is required.
+            honeypot `bot-field` prevents spam.
+          -->
+          <form
+            name="contact"
+            method="POST"
+            action="contact.html?success=true"
+            netlify
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            id="contact-form"
+          >
+            <!-- Required hidden field for Netlify Forms -->
+            <input type="hidden" name="form-name" value="contact" />
+            <!-- Honeypot field — hidden from humans, traps bots -->
+            <p hidden><label>Don't fill this out: <input name="bot-field" /></label></p>
+
+            <!-- REPLACE: form fields as needed -->
+            <div class="form-group">
+              <label class="form-label" for="name">Your Name <span aria-hidden="true" style="color:#EF4444;">*</span></label>
+              <!-- REPLACE: placeholder text -->
+              <input class="form-input" type="text" id="name" name="name" placeholder="Jane Smith" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address <span aria-hidden="true" style="color:#EF4444;">*</span></label>
+              <!-- REPLACE: placeholder text -->
+              <input class="form-input" type="email" id="email" name="email" placeholder="jane@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="subject">Subject</label>
+              <select class="form-input form-select" id="subject" name="subject">
+                <!-- REPLACE: dropdown options as needed -->
+                <option value="">Select a topic…</option>
+                <option value="startup-pitch">Startup Pitch</option>
+                <option value="collaboration">Research Collaboration</option>
+                <option value="press">Press / Media</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="message">Message <span aria-hidden="true" style="color:#EF4444;">*</span></label>
+              <!-- REPLACE: placeholder text -->
+              <textarea class="form-textarea" id="message" name="message" placeholder="Tell me about your startup, question, or idea…" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;">
+              Send Message
+            </button>
+          </form>
+
+          <!-- Success message shown after Netlify redirect or JS check -->
+          <div class="form-success" id="form-success">
+            ✅ Message sent! I'll get back to you within 2 business days.
+          </div>
+        </div>
+
+        <!-- ===== CONTACT INFO SIDEBAR ===== -->
+        <div>
+          <!-- Profile card -->
+          <div style="background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:2rem;margin-bottom:2rem;">
+            <!-- REPLACE: profile photo in contact sidebar -->
+            <div class="profile-avatar" style="width:96px;height:96px;font-size:1.75rem;">
+              <!-- REPLACE: initials or uncomment img tag below -->
+              AM
+              <!-- <img src="img/profile-photo.jpg" alt="Profile photo — REPLACE" /> -->
+            </div>
+            <!-- REPLACE: your name -->
+            <h3 style="text-align:center;margin-bottom:0.25rem;margin-top:0.75rem;">Alex Morgan</h3>
+            <!-- REPLACE: your role/title -->
+            <p style="text-align:center;color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem;">Investor &amp; Startup Analyst</p>
+
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+              <!-- REPLACE: email address -->
+              <a href="mailto:REPLACE@youremail.com" class="btn btn-outline" style="justify-content:center;">
+                ✉️ REPLACE@youremail.com <!-- REPLACE: email -->
+              </a>
+              <!-- REPLACE: LinkedIn profile URL -->
+              <a href="https://linkedin.com/in/REPLACE-YOUR-LINKEDIN" class="btn btn-outline" style="justify-content:center;" target="_blank" rel="noopener">
+                💼 LinkedIn <!-- REPLACE: LinkedIn handle -->
+              </a>
+              <!-- REPLACE: Twitter/X handle -->
+              <a href="https://twitter.com/REPLACE-YOUR-TWITTER" class="btn btn-outline" style="justify-content:center;" target="_blank" rel="noopener">
+                🐦 Twitter/X <!-- REPLACE: @handle -->
+              </a>
+            </div>
+          </div>
+
+          <!-- FAQ / expectations -->
+          <div style="background:#EEF2F9;border-radius:var(--radius);padding:1.5rem;">
+            <h3 style="margin-bottom:1rem;">What to Expect</h3>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:0.75rem;">
+              <li style="font-size:0.875rem;display:flex;gap:0.5rem;">
+                <span style="color:var(--accent);font-weight:700;">→</span>
+                <!-- REPLACE: response time expectation -->
+                I aim to respond within 2 business days.
+              </li>
+              <li style="font-size:0.875rem;display:flex;gap:0.5rem;">
+                <span style="color:var(--accent);font-weight:700;">→</span>
+                For startup pitches, a short deck (5–10 slides) is helpful.
+              </li>
+              <li style="font-size:0.875rem;display:flex;gap:0.5rem;">
+                <span style="color:var(--accent);font-weight:700;">→</span>
+                <!-- REPLACE: stages/sectors you focus on -->
+                I focus on Seed–Series B companies in Fintech, SaaS, and Climate Tech.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       FOOTER — REPLACE: name/site
+       ==================================================== -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <!-- REPLACE: name and site in copyright -->
+    <p>&copy; <span id="footer-year"></span> Alex Morgan &mdash; VentureLens. All rights reserved.</p>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Show success message if redirected back with ?success=true
+    if (window.location.search.includes('success=true')) {
+      document.getElementById('form-success').style.display = 'block';
+      document.getElementById('contact-form').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

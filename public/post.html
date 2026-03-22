@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Title is set dynamically by JS from post data -->
+  <title>Post — VentureLens</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/shared.css" />
+</head>
+<body>
+
+  <!-- ====================================================
+       NAVBAR — REPLACE: brand name
+       ==================================================== -->
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <!-- REPLACE: brand name -->
+      <a href="index.html" class="navbar-brand">Venture<span class="accent">Lens</span></a>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Post content is injected into #post-root by JS below -->
+  <div id="post-root">
+    <div class="container" style="padding:4rem 1.5rem;text-align:center;">
+      <p style="color:var(--text-muted);">Loading post…</p>
+    </div>
+  </div>
+
+  <!-- ====================================================
+       FOOTER — REPLACE: name/site
+       ==================================================== -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <!-- REPLACE: name and site in copyright -->
+    <p>&copy; <span id="footer-year"></span> Alex Morgan &mdash; VentureLens. All rights reserved.</p>
+  </footer>
+
+  <script src="data/posts.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    /* -------------------------------------------------------
+       Star renderer: returns HTML string of filled/empty stars
+       rating = integer 1–5
+    ------------------------------------------------------- */
+    function renderStars(rating) {
+      let html = '<span class="stars">';
+      for (let i = 1; i <= 5; i++) {
+        html += i <= rating ? '★' : '<span class="empty">★</span>';
+      }
+      return html + '</span>';
+    }
+
+    /* -------------------------------------------------------
+       Funding table rows
+    ------------------------------------------------------- */
+    function fundingRows(history) {
+      return history.map(r => `
+        <tr>
+          <td>${r.round}</td>
+          <td>${r.date}</td>
+          <td><strong>${r.amount}</strong></td>
+          <td>${r.investors}</td>
+        </tr>`).join('');
+    }
+
+    /* -------------------------------------------------------
+       Key metrics list items
+    ------------------------------------------------------- */
+    function metricItems(metrics) {
+      return metrics.map(m => `
+        <li>
+          <span class="metric-label">${m.label}</span>
+          <span>
+            <span class="metric-value">${m.value}</span>
+            ${m.note ? `<span class="metric-note">${m.note}</span>` : ''}
+          </span>
+        </li>`).join('');
+    }
+
+    /* -------------------------------------------------------
+       Main render function
+    ------------------------------------------------------- */
+    function renderPost(post) {
+      // Update page title
+      document.title = post.title + ' — VentureLens';
+
+      const dateStr = new Date(post.date).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+      const tags = post.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const verdict = post.myVerdict;
+      const verdictLabel = verdict === 'bull' ? '🐂 Bull' : verdict === 'bear' ? '🐻 Bear' : '⚖️ Neutral';
+      const verdictClass = 'verdict-' + verdict;
+
+      document.getElementById('post-root').innerHTML = `
+        <!-- Page hero -->
+        <div class="page-hero" style="text-align:left;">
+          <div class="container">
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">${tags}</div>
+            <h1 style="max-width:800px;">${post.title}</h1>
+            <p style="margin-top:0.5rem;">${post.summary}</p>
+            <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap;">
+              <span class="verdict-badge ${verdictClass}" style="font-size:0.9rem;">${verdictLabel}</span>
+              <span style="color:rgba(255,255,255,0.65);font-size:0.875rem;">${dateStr}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="container">
+            <div class="post-layout">
+
+              <!-- ===== MAIN CONTENT ===== -->
+              <main>
+
+                <!-- Hero image -->
+                <!-- REPLACE: post hero image — update src and alt for real images -->
+                <img class="post-hero-img" src="${post.image}" alt="${post.imageAlt}" />
+
+                <!-- One-Liner -->
+                <div class="post-section">
+                  <h2>One-Liner</h2>
+                  <p>${post.oneLiner}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- The Problem -->
+                <div class="post-section">
+                  <h2>The Problem</h2>
+                  <p>${post.theProblem}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Founders & Background -->
+                <div class="post-section">
+                  <h2>Founders &amp; Background</h2>
+                  <p>${post.foundersBackground}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Business Model -->
+                <div class="post-section">
+                  <h2>Business Model</h2>
+                  <p>${post.businessModel}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Funding History -->
+                <div class="post-section">
+                  <h2>Funding History</h2>
+                  <div style="overflow-x:auto;">
+                    <table class="funding-table">
+                      <thead>
+                        <tr><th>Round</th><th>Date</th><th>Amount</th><th>Lead Investors</th></tr>
+                      </thead>
+                      <tbody>${fundingRows(post.fundingHistory)}</tbody>
+                    </table>
+                  </div>
+                </div>
+                <hr class="divider" />
+
+                <!-- Market Size -->
+                <div class="post-section">
+                  <h2>Market Size</h2>
+                  <p>${post.marketSize}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Competitive Landscape -->
+                <div class="post-section">
+                  <h2>Competitive Landscape</h2>
+                  <p>${post.competitiveLandscape}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Key Metrics -->
+                <div class="post-section">
+                  <h2>Key Metrics</h2>
+                  <ul class="metrics-list">${metricItems(post.keyMetrics)}</ul>
+                </div>
+                <hr class="divider" />
+
+                <!-- Why Now -->
+                <div class="post-section">
+                  <h2>Why Now</h2>
+                  <p>${post.whyNow}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- Risks & Challenges -->
+                <div class="post-section">
+                  <h2>Risks &amp; Challenges</h2>
+                  <p>${post.risksAndChallenges}</p>
+                </div>
+                <hr class="divider" />
+
+                <!-- My Verdict -->
+                <div class="post-section">
+                  <h2>My Verdict</h2>
+                  <div style="margin-bottom:0.75rem;">
+                    <span class="verdict-badge ${verdictClass}" style="font-size:1rem;padding:0.4rem 1rem;">${verdictLabel}</span>
+                  </div>
+                  <p>${post.verdictText}</p>
+                </div>
+
+                <div style="margin-top:2rem;">
+                  <a href="blogs.html" class="btn btn-outline">&larr; Back to all posts</a>
+                </div>
+              </main>
+
+              <!-- ===== SIDEBAR ===== -->
+              <aside class="post-sidebar">
+
+                <!-- Ratings Card -->
+                <div class="sidebar-card">
+                  <h3>Ratings</h3>
+                  <div class="ratings-grid">
+                    <div class="star-row">
+                      <span style="min-width:65px;font-weight:600;font-size:0.82rem;">Team</span>
+                      ${renderStars(post.ratings.team)}
+                      <span style="font-size:0.78rem;color:var(--text-muted);">${post.ratings.team}/5</span>
+                    </div>
+                    <div class="star-row">
+                      <span style="min-width:65px;font-weight:600;font-size:0.82rem;">Market</span>
+                      ${renderStars(post.ratings.market)}
+                      <span style="font-size:0.78rem;color:var(--text-muted);">${post.ratings.market}/5</span>
+                    </div>
+                    <div class="star-row">
+                      <span style="min-width:65px;font-weight:600;font-size:0.82rem;">Product</span>
+                      ${renderStars(post.ratings.product)}
+                      <span style="font-size:0.78rem;color:var(--text-muted);">${post.ratings.product}/5</span>
+                    </div>
+                    <div class="star-row">
+                      <span style="min-width:65px;font-weight:600;font-size:0.82rem;">Traction</span>
+                      ${renderStars(post.ratings.traction)}
+                      <span style="font-size:0.78rem;color:var(--text-muted);">${post.ratings.traction}/5</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- About the Author -->
+                <div class="sidebar-card">
+                  <h3>About the Author</h3>
+                  <!-- REPLACE: profile photo in sidebar -->
+                  <div class="profile-avatar" style="width:64px;height:64px;font-size:1.2rem;">
+                    <!-- REPLACE: author initials or uncomment img tag below -->
+                    AM
+                    <!-- <img src="img/profile-photo.jpg" alt="Author photo — REPLACE" /> -->
+                  </div>
+                  <!-- REPLACE: author name -->
+                  <p style="font-weight:700;text-align:center;margin-bottom:0.25rem;">Alex Morgan</p>
+                  <!-- REPLACE: author bio (short) -->
+                  <p style="font-size:0.82rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;">Former operator. Angel investor. Writing about what I find interesting.</p>
+                  <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Get in Touch</a>
+                </div>
+
+                <!-- Tags -->
+                <div class="sidebar-card">
+                  <h3>Tags</h3>
+                  <div style="display:flex;flex-wrap:wrap;gap:0.4rem;" id="sidebar-tags">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+
+              </aside>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Populate sidebar tags
+      post.tags.forEach(tag => {
+        const el = document.createElement('a');
+        el.href = 'blogs.html';
+        el.className = 'tag';
+        el.textContent = tag;
+        el.style.marginBottom = '0.2rem';
+        document.getElementById('sidebar-tags').appendChild(el);
+      });
+    }
+
+    /* -------------------------------------------------------
+       Read ?id= from URL and find matching post
+    ------------------------------------------------------- */
+    function loadPost() {
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'), 10);
+
+      if (!id || isNaN(id)) {
+        // No ID — show error / redirect to blog list
+        document.getElementById('post-root').innerHTML = `
+          <div class="container" style="padding:4rem 1.5rem;text-align:center;">
+            <h2>Post not found</h2>
+            <p>No post ID was specified. <a href="blogs.html">Browse all posts &rarr;</a></p>
+          </div>`;
+        return;
+      }
+
+      const post = POSTS.find(p => p.id === id);
+      if (!post) {
+        document.getElementById('post-root').innerHTML = `
+          <div class="container" style="padding:4rem 1.5rem;text-align:center;">
+            <h2>Post not found</h2>
+            <p>We couldn't find a post with ID ${id}. <a href="blogs.html">Browse all posts &rarr;</a></p>
+          </div>`;
+        return;
+      }
+
+      renderPost(post);
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>

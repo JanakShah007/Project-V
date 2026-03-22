@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- REPLACE: page title / site name -->
+  <title>Venture Lens — Startup Analysis & Investment Insights</title>
+  <meta name="description" content="Deep-dive startup analysis, investment notes, and founder stories from a tech investor's perspective." />
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/shared.css" />
+</head>
+<body>
+
+  <!-- ====================================================
+       NAVBAR
+       REPLACE: "Venture Lens" with your site/brand name
+       REPLACE: nav links if you add or rename pages
+       ==================================================== -->
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="navbar-inner">
+      <!-- REPLACE: brand name -->
+      <a href="index.html" class="navbar-brand">
+        Venture<span class="accent">Lens</span>
+      </a>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blogs.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ====================================================
+       HOME HERO
+       REPLACE: name, tagline, bio, and profile photo
+       ==================================================== -->
+  <section class="home-hero">
+    <div class="home-hero-inner container">
+      <div class="home-hero-text">
+        <!-- REPLACE: your name -->
+        <h1>Hi, I'm <span style="color:var(--accent)">Alex Morgan</span></h1>
+        <!-- REPLACE: your one-line professional tagline -->
+        <p>I write deep-dive analyses on high-growth startups, emerging technology, and the stories behind the funding rounds that matter.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="blogs.html" class="btn btn-accent">Read the Blog</a>
+          <a href="contact.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.5);color:#fff;">Get in Touch</a>
+        </div>
+      </div>
+      <!-- REPLACE: profile photo — swap src with your real headshot URL or file path -->
+      <!-- To use a local file: place it in /public/img/ and update src -->
+      <div class="home-hero-avatar" id="profile-avatar-home">
+        <!-- REPLACE: profile photo -->
+        <!-- Option A: placeholder initials (shown by default) -->
+        AM
+        <!-- Option B: uncomment and update with real photo:
+        <img src="img/profile-photo.jpg" alt="Alex Morgan — replace with your name and photo" />
+        -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       ABOUT STRIP
+       REPLACE: bio, social links, LinkedIn URL, Twitter handle, email
+       ==================================================== -->
+  <section class="about-strip">
+    <div class="about-strip-inner">
+      <div>
+        <h2>About</h2>
+        <!-- REPLACE: your bio (2–3 sentences) -->
+        <p>Former operator turned angel investor. I've spent 10 years building and advising startups across Fintech, SaaS, and Climate Tech. This blog is my public notebook for tracking companies I find interesting.</p>
+        <div class="social-links">
+          <!-- REPLACE: LinkedIn profile URL -->
+          <a href="https://linkedin.com/in/REPLACE-YOUR-LINKEDIN" class="social-link" target="_blank" rel="noopener">LinkedIn <!-- REPLACE: LinkedIn --></a>
+          <!-- REPLACE: Twitter/X handle (e.g. @alexmorgan) -->
+          <a href="https://twitter.com/REPLACE-YOUR-TWITTER" class="social-link" target="_blank" rel="noopener">Twitter <!-- REPLACE: @handle --></a>
+          <!-- REPLACE: email address -->
+          <a href="mailto:REPLACE@youremail.com" class="social-link">Email <!-- REPLACE: email --></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       RECENT POSTS (populated from data/posts.js)
+       The 3 most recent posts are shown automatically.
+       ==================================================== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Latest Analysis</h2>
+      <p class="section-subtitle">Fresh takes on companies worth watching.</p>
+      <div class="cards-grid" id="recent-posts-grid">
+        <!-- JS populates this -->
+      </div>
+      <div class="text-center mt-4">
+        <a href="blogs.html" class="btn btn-primary">View All Posts &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================
+       FOOTER
+       REPLACE: site name, footer links, copyright name
+       ==================================================== -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="blogs.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <!-- REPLACE: your name and site name in copyright -->
+    <p>&copy; <span id="footer-year"></span> <!-- REPLACE: Your Name --> Alex Morgan &mdash; <!-- REPLACE: Site Name --> VentureLens. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data/posts.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    // Footer year
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Render 3 most recent posts
+    function renderCard(post) {
+      const verdict = post.myVerdict;
+      const verdictLabel = verdict === 'bull' ? '🐂 Bull' : verdict === 'bear' ? '🐻 Bear' : '⚖️ Neutral';
+      const verdictClass = 'verdict-' + verdict;
+      const tags = post.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const dateStr = new Date(post.date).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+      return `
+        <article class="card">
+          <img class="card-thumb" src="${post.image}" alt="${post.imageAlt}" loading="lazy" />
+          <div class="card-body">
+            <div class="card-tags">${tags}</div>
+            <h3 class="card-title">${post.title}</h3>
+            <p class="card-summary">${post.summary}</p>
+            <div class="card-meta">${dateStr}</div>
+            <div class="card-footer" style="display:flex;align-items:center;justify-content:space-between;">
+              <span class="verdict-badge ${verdictClass}">${verdictLabel}</span>
+              <a href="post.html?id=${post.id}" class="btn btn-outline" style="padding:0.35rem 0.9rem;font-size:0.8rem;">Read &rarr;</a>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // Sort by date descending, take 3
+    const recent = [...POSTS].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+    document.getElementById('recent-posts-grid').innerHTML = recent.map(renderCard).join('');
+  </script>
+</body>
+</html>
