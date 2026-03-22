@@ -1,0 +1,7 @@
+.hero {
+  grid-template-columns: 1fr auto;
+}
+
+.profile-photo {
+  object-fit: contain;
+}
