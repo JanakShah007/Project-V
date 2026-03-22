@@ -558,7 +558,7 @@ hr.divider {
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr auto;
   gap: 3rem;
   align-items: center;
 }
@@ -583,7 +583,7 @@ hr.divider {
   font-weight: 800;
   color: rgba(255,255,255,0.7);
 }
-.home-hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.home-hero-avatar img { width: 100%; height: 100%; object-fit: contain; }
 
 /* ---------- About Blurb ---------- */
 .about-strip {
